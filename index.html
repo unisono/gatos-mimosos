@@ -1,541 +1,562 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
-      :root {
-        --speed: 1.4s;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+    :root {
+      --speed: 1.4s;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      height: 100vh;
+    }
+
+    body {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #9f9f9f;
+      font-family: "Press Start 2P", cursive;
+      flex-direction: column;
+    }
+
+    .game_chrome {
+      width: 600px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 5px 5px 15px #00000091;
+      padding: 50px 300px;
+      height: 200px;
+      z-index: 9;
+      background-color: #ebebeb;
+      background-image: url(assets/fondo.png);
+      background-repeat: repeat-x;
+    }
+
+    /* codigo agustin */
+    .game_chrome:after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 500px;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+    }
+
+    /* codigo agustin */
+
+    #game_over {
+      position: absolute;
+      content: "";
+      height: 250px;
+      width: 250px;
+      background-color: red;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+    }
+
+    .line {
+      height: 6px;
+      width: 100%;
+      position: relative;
+      background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/land.png);
+      background-repeat: repeat;
+      background-size: contain;
+      animation: road_land 0.6s infinite linear;
+      margin-top: 273px;
+    }
+
+    .line::before {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 0;
+      right: 0;
+      border: 1px solid #7878782b;
+    }
+
+    #cow {
+      position: absolute;
+      top: -54px;
+      left: 0;
+      z-index: 99;
+    }
+
+    #obstaculo {
+      position: absolute;
+      top: -55px;
+      right: 0;
+      animation: move var(--speed) infinite linear;
+      animation-delay: 0.7s;
+    }
+
+    .line img {
+      height: 60px;
+    }
+
+    .elements {
+      position: relative;
+      z-index: -1;
+    }
+
+    .elements::before {
+      background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/cloud.PNG);
+      top: -170px;
+      right: -350px;
+      animation: move_cloud_1 var(--speed) infinite linear;
+      animation-delay: 0.2s;
+    }
+
+    .elements::before,
+    .elements::after {
+      position: absolute;
+      content: "";
+      height: 25px;
+      width: 50px;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .elements::after {
+      background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/cloud.PNG);
+      top: -140px;
+      right: -30px;
+      animation: move_cloud_2 var(--speed) infinite linear;
+    }
+
+    .jump {
+      animation: jump 0.6s infinite linear;
+    }
+
+    .timer_info {
+      position: absolute;
+      top: -50px;
+      right: -260px;
+      font-size: 20px;
+      padding-top: 15px;
+      font-family: "Press Start 2P", cursive;
+      color: #fff;
+      z-index: 999999;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    p#start {
+      color: white;
+      position: absolute;
+      z-index: 9999;
+    }
+
+    @keyframes move {
+      0% {
+        right: -50px;
       }
 
-      * {
-        margin: 0;
-        padding: 0;
+      100% {
+        right: 100%;
       }
-      html {
-        height: 100vh;
-      }
-      body {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #9f9f9f;
-        font-family: "Press Start 2P", cursive;
-        flex-direction: column;
+    }
+
+    @keyframes jump {
+      0% {
+        top: -57px;
       }
 
-      .game_chrome {
-        width: 600px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        position: relative;
-        box-shadow: 5px 5px 15px #00000091;
-        padding: 50px 300px;
-        height: 200px;
-        z-index: 9;
-        background-color: #ebebeb;
-        background-image: url(assets/fondo.png);
-        background-repeat: repeat-x;
+      25% {
+        top: -90px;
       }
 
-      #game_over {
-        position: absolute;
-        content: "";
-        height: 250px;
-        width: 250px;
-        background-color: red;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%);
-        display: none;
-      }
-
-      .line {
-        height: 6px;
-        width: 100%;
-        position: relative;
-        background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/land.png);
-        background-repeat: repeat;
-        background-size: contain;
-        animation: road_land 0.6s infinite linear;
-        margin-top: 273px;
-      }
-
-      .line::before {
-        content: "";
-        position: absolute;
-        top: 2px;
-        left: 0;
-        right: 0;
-        border: 1px solid #7878782b;
-      }
-
-      #cow {
-        position: absolute;
-        top: -54px;
-        left: 0;
-        z-index: 99;
-      }
-
-      #obstaculo {
-        position: absolute;
-        top: -55px;
-        right: 0;
-        animation: move var(--speed) infinite linear;
-        animation-delay: 0.7s;
-      }
-
-      .line img {
-        height: 60px;
-      }
-
-      .elements {
-        position: relative;
-        z-index: -1;
-      }
-
-      .elements::before {
-        background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/cloud.PNG);
-        top: -170px;
-        right: -350px;
-        animation: move_cloud_1 var(--speed) infinite linear;
-        animation-delay: 0.2s;
-      }
-
-      .elements::before,
-      .elements::after {
-        position: absolute;
-        content: "";
-        height: 25px;
-        width: 50px;
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-
-      .elements::after {
-        background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/cloud.PNG);
+      50% {
         top: -140px;
+      }
+
+      75% {
+        top: -90px;
+      }
+
+      100% {
+        top: -55px;
+      }
+    }
+
+    @keyframes move_cloud_1 {
+      0% {
+        right: -350px;
+      }
+
+      100% {
+        right: 100%;
+      }
+    }
+
+    @keyframes move_cloud_2 {
+      0% {
         right: -30px;
-        animation: move_cloud_2 var(--speed) infinite linear;
       }
 
-      .jump {
-        animation: jump 0.6s infinite linear;
+      100% {
+        right: 100%;
+      }
+    }
+
+    @keyframes road_land {
+      0% {
+        background-position-x: 150px;
       }
 
-      .timer_info {
-        position: absolute;
-        top: -50px;
-        right: -480px;
-        font-size: 20px;
-        padding-top: 15px;
-        font-family: "Press Start 2P", cursive;
-        color: #333;
-        letter-spacing: 1px;
-        text-align: center;
+      100% {
+        background-position-x: 0;
       }
+    }
 
-      .timer_info p {
-        padding-top: 40px;
-        text-align: center;
-        font-size: 10px;
-      }
-      .timer_info p span {
-        font-weight: bold;
-        font-size: 14px;
-        color: #3179a7;
-      }
-      .timer_info p span:hover {
-        font-size: 15px;
-        transition: all 0.5s ease-in-out;
-      }
+    .background {
+      background-image: url("./assets/fondo.png");
+      background-repeat: repeat;
+    }
 
-      @keyframes move {
-        0% {
-          right: -50px;
-        }
+    .preload *,
+    .preload *::before,
+    .preload *::after {
+      animation-duration: 0s !important;
+      -webkit-animation-duration: 0s !important;
+    }
 
-        100% {
-          right: 100%;
-        }
-      }
+    .hide {
+      display: none;
+    }
 
-      @keyframes jump {
-        0% {
-          top: -57px;
-        }
+    #pantalla_carga {
+      padding: 200px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 5px 5px 15px #00000091;
+    }
 
-        25% {
-          top: -90px;
-        }
+    #pantalla_carga form {
+      display: flex;
+      flex-direction: column;
+    }
 
-        50% {
-          top: -140px;
-        }
+    #pantalla_carga form label {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
 
-        75% {
-          top: -90px;
-        }
+    #pantalla_carga form input {
+      margin-bottom: 20px;
+      padding: 10px 5px;
+      border-radius: 8px;
+      font-family: monospace;
+      text-transform: uppercase;
+      font-size: 20px;
+      text-align: center;
+    }
 
-        100% {
-          top: -55px;
-        }
-      }
+    #pantalla_carga form button {
+      font-size: 14px;
+      padding: 20px;
+      background-color: #3179a7;
+      border: 0;
+      color: white;
+      text-transform: uppercase;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-family: "Press Start 2P", cursive;
+      cursor: pointer;
+    }
 
-      @keyframes move_cloud_1 {
-        0% {
-          right: -350px;
-        }
+    #pantalla_carga form button:hover {
+      transform: scale(1.1);
+      transition: all 1s ease;
+    }
 
-        100% {
-          right: 100%;
-        }
-      }
+    #pantalla_carga form small {
+      text-align: center;
+    }
 
-      @keyframes move_cloud_2 {
-        0% {
-          right: -30px;
-        }
+    #name_score_info {
+      background-color: #ebebeb;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 5px 5px 15px #00000091;
+      margin-bottom: 20px;
+    }
 
-        100% {
-          right: 100%;
-        }
-      }
+    #name_score_info>div {
+      text-align: center;
+    }
 
-      @keyframes road_land {
-        0% {
-          background-position-x: 150px;
-        }
+    #name_score_info>div h1 {
+      margin-bottom: 20px;
+    }
 
-        100% {
-          background-position-x: 0;
-        }
-      }
+    #name_score_info>div h2 {
+      margin-top: 20px;
+    }
 
-      .background {
-        background-image: url("./assets/fondo.png");
-        background-repeat: repeat;
-      }
-      .preload *,
-      .preload *::before,
-      .preload *::after {
-        animation-duration: 0s !important;
-        -webkit-animation-duration: 0s !important;
-      }
+    #name_score_info>div span {
+      color: #3179a7;
+    }
 
-      .hide {
-        display: none;
-      }
+    #modal {
+      display: none;
+      position: absolute;
+      top: 25%;
+      left: 40%;
+      width: 450px;
+      height: 450px;
+      text-align: center;
+      background-color: #ebebeb;
+      color: #333;
+      z-index: 99999;
+      padding: 30px;
+      border-radius: 8px;
+    }
 
-      #pantalla_carga {
-        padding: 200px;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 5px 5px 15px #00000091;
-      }
+    #modal.show {
+      display: block;
+    }
 
-      #pantalla_carga form {
-        display: flex;
-        flex-direction: column;
-      }
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 15;
+      width: 100%;
+      height: 100%;
+      display: none;
+      background-color: #3333338f;
+    }
 
-      #pantalla_carga form label {
-        font-size: 18px;
-        margin-bottom: 20px;
-      }
+    #overlay.show {
+      display: block;
+    }
 
-      #pantalla_carga form input {
-        margin-bottom: 20px;
-        padding: 10px 5px;
-        border-radius: 8px;
-        font-family: monospace;
-        text-transform: uppercase;
-        font-size: 20px;
-        text-align: center;
-      }
+    .hide {
+      display: none;
+    }
+  </style>
+</head>
 
-      #pantalla_carga form button {
-        font-size: 14px;
-        padding: 20px;
-        background-color: #3179a7;
-        border: 0;
-        color: white;
-        text-transform: uppercase;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        font-family: "Press Start 2P", cursive;
-        cursor: pointer;
-      }
+<body class="preload">
+  <div id="overlay"></div>
 
-      #pantalla_carga form button:hover {
-        transform: scale(1.1);
-        transition: all 1s ease;
-      }
+  <div class="game_chrome hide" id="game_chrome">
+    <p id="start">¡Presionar la <span>BARRA ESPACIADORA</span> para EMPEZAR!</p>
 
-      #pantalla_carga form small {
-        text-align: center;
-      }
-
-      #name_score_info {
-        background-color: #ebebeb;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 5px 5px 15px #00000091;
-        margin-bottom: 20px;
-      }
-
-      #name_score_info > div {
-        text-align: center;
-      }
-
-      #name_score_info > div h1 {
-        margin-bottom: 20px;
-      }
-
-      #name_score_info > div h2 {
-        margin-top: 20px;
-      }
-
-      #name_score_info > div span {
-        color: #3179a7;
-      }
-      #modal {
-        display: none;
-        position: absolute;
-        top: 25%;
-        left: 40%;
-        width: 450px;
-        height: 450px;
-        text-align: center;
-        background-color: #ebebeb;
-        color: #333;
-        z-index: 99999;
-        padding: 30px;
-        border-radius: 8px;
-      }
-      #modal.show {
-        display: block;
-      }
-      #overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 15;
-        width: 100%;
-        height: 100%;
-        display: none;
-        background-color: #3333338f;
-      }
-      #overlay.show {
-        display: block;
-      }
-    </style>
-  </head>
-
-  <body class="preload">
-    <div id="overlay"></div>
-    <div id="modal">
-      <h1>¡Superaste tu puntación!</h1>
-    </div>
-
-    <div id="pantalla_carga">
-      <form action="" id="form_pantalla_carga">
-        <label for="name">Ingresa tu nombre</label>
-        <input type="text" id="name" placeholder="Ingresa tu nombre" />
-        <button id="registrar">Registrar</button>
-        <small>¡MOOOCHA SUERTE!</small>
-      </form>
-    </div>
-
-    <div id="name_score_info" class="hide">
-      <div>
-        <h1>¡VAMOS: <span id="name_local"></span>!</h1>
-      </div>
-      <hr />
-      <div>
-        <h2>Tu mejor puntuación: <span id="value_local"></span></h2>
+    <div class="line">
+      <p class="cow_rex">
+        <img id="cow" src="./assets/Jugador.gif" alt="cow_pic" />
+      </p>
+      <p class="elements">
+        <img id="obstaculo" src="https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png" alt="cactus_pic" />
+      </p>
+      <div class="timer_info" id="timer">
+        00:00:00
       </div>
     </div>
-    <div class="game_chrome hide" id="game_chrome">
-      <div class="line">
-        <p class="cow_rex">
-          <img id="cow" src="./assets/Jugador.gif" alt="cow_pic" />
-        </p>
-        <p class="elements">
-          <img
-            id="obstaculo"
-            src="https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png"
-            alt="cactus_pic"
-          />
-        </p>
-        <div class="timer_info" id="timer">
-          00:00:00
-          <p>¡Presionar la <span>BARRA ESPACIADORA</span> para EMPEZAR!</p>
-        </div>
-      </div>
+  </div>
+
+  <div id="modal">
+    <h1>¡Superaste tu puntación!</h1>
+  </div>
+
+
+  <div id="pantalla_carga">
+    <form action="" id="form_pantalla_carga">
+      <label for="name">Ingresa tu nombre</label>
+      <input type="text" id="name" placeholder="Ingresa tu nombre" />
+      <button id="registrar">Registrar</button>
+      <small>¡MOOOCHA SUERTE!</small>
+    </form>
+  </div>
+
+  <div id="name_score_info" class="hide" style="margin-top:50px">
+    <div>
+      <h1>¡VAMOS: <span id="name_local"></span>!</h1>
     </div>
-    <script>
-      var cow = document.getElementById("cow");
+    <hr />
+    <div>
+      <h2>Tu mejor puntuación: <span id="value_local"></span></h2>
+    </div>
+  </div>
+  <script>
+    var cow = document.getElementById("cow");
 
-      var cactus = document.getElementById("obstaculo");
+    var cactus = document.getElementById("obstaculo");
 
-      const obstaculos = document.querySelectorAll(".elements");
+    const obstaculos = document.querySelectorAll(".elements");
 
-      var timer = document.getElementById("timer");
+    var timer = document.getElementById("timer");
 
-      var audio_jump = new Audio(
-        "https://arsen-nazaryan.github.io/cow_t_rex/audio/jump.wav"
-      );
+    var audio_jump = new Audio(
+      "https://arsen-nazaryan.github.io/cow_t_rex/audio/jump.wav"
+    );
 
-      var audio_game_over = new Audio(
-        "https://arsen-nazaryan.github.io/cow_t_rex/audio/dead.wav"
-      );
+    var audio_game_over = new Audio(
+      "https://arsen-nazaryan.github.io/cow_t_rex/audio/dead.wav"
+    );
 
-      var timeInSec = 0;
+    var timeInSec = 0;
 
-      var timer_interval;
+    var timer_interval;
 
-      const modal = document.getElementById("modal");
+    const modal = document.getElementById("modal");
 
-      const overlay = document.getElementById("overlay");
+    const overlay = document.getElementById("overlay");
 
-      const buttonRegister = document.getElementById("registrar");
-      const gameContainer = document.getElementById("game_chrome");
-      const pantalla_carga = document.getElementById("pantalla_carga");
-      const form_pantalla_carga = document.getElementById(
-        "form_pantalla_carga"
-      );
-      const name_score_info = document.getElementById("name_score_info");
-      const name_local = document.getElementById("name_local");
-      const value_local = document.getElementById("value_local");
+    const buttonRegister = document.getElementById("registrar");
+    const gameContainer = document.getElementById("game_chrome");
+    const pantalla_carga = document.getElementById("pantalla_carga");
+    const start = document.getElementById("start");
+    const form_pantalla_carga = document.getElementById(
+      "form_pantalla_carga"
+    );
+    const name_score_info = document.getElementById("name_score_info");
+    const name_local = document.getElementById("name_local");
+    const value_local = document.getElementById("value_local");
 
-      overlay.addEventListener("click", function () {
-        overlay.classList.remove("show");
-        modal.classList.remove("show");
-      });
+    overlay.addEventListener("click", function () {
+      overlay.classList.remove("show");
+      modal.classList.remove("show");
+    });
 
-      const obstaculosArr = [
-        "https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png",
-        "./assets/fardo.png",
-      ];
+    const obstaculosArr = [
+      "https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png",
+      "./assets/fardo.png",
+      "./assets/hay-stray.png"
+    ];
 
-      function start_time() {
-        if (timer_interval) {
-          clearInterval(timer_interval);
-        }
-
-        timer_interval = setInterval(function () {
-          timeInSec += 1;
-          convertSecondsToTime();
-        }, 10);
+    function start_time() {
+      if (timer_interval) {
+        clearInterval(timer_interval);
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        if (localStorage.getItem("name")) {
-          name_local.innerHTML = localStorage.getItem("name");
-          if (localStorage.getItem("value")) {
-            value_local.textContent = localStorage.getItem("value");
-          }
-          pantalla_carga.classList.add("hide");
+      timer_interval = setInterval(function () {
+        timeInSec += 1;
+        convertSecondsToTime();
+      }, 10);
+    }
 
-          gameContainer.classList.remove("hide");
-          name_score_info.classList.remove("hide");
-        }
-      });
-      form_pantalla_carga.addEventListener("submit", (event) => {
-        event.preventDefault();
-        let nameValue = document.getElementById("name").value;
-        localStorage.setItem("name", nameValue);
-        pantalla_carga.classList.add("hide");
-        if (localStorage.getItem("value")) {
-          value_local.textContent = localStorage.getItem("value");
-        }
-        gameContainer.classList.remove("hide");
-        name_score_info.classList.remove("hide");
+    document.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("name")) {
         name_local.innerHTML = localStorage.getItem("name");
         if (localStorage.getItem("value")) {
           value_local.textContent = localStorage.getItem("value");
         }
-      });
+        pantalla_carga.classList.add("hide");
 
-      function convertSecondsToTime() {
-        given_seconds = timeInSec;
-
-        dateObj = new Date(given_seconds * 10);
-        minutes = dateObj.getUTCMinutes();
-        seconds = dateObj.getSeconds();
-        miliSeconds = dateObj.getMilliseconds();
-
-        timeString =
-          minutes.toString().padStart(2, "0") +
-          ":" +
-          seconds.toString().padStart(2, "0") +
-          ":" +
-          (miliSeconds / 10).toString().padStart(2, "0");
-
-        timer.textContent = timeString;
+        gameContainer.classList.remove("hide");
+        name_score_info.classList.remove("hide");
       }
-
-      function reset_time() {
-        clearInterval(timer_interval);
-        timeInSec = 0;
-        timer.textContent = "00:00:00";
+    });
+    form_pantalla_carga.addEventListener("submit", (event) => {
+      event.preventDefault();
+      let nameValue = document.getElementById("name").value;
+      localStorage.setItem("name", nameValue);
+      pantalla_carga.classList.add("hide");
+      if (localStorage.getItem("value")) {
+        value_local.textContent = localStorage.getItem("value");
       }
-
-      function jump() {
-        if (cow.classList != "jump") {
-          cow.classList.add("jump");
-        }
-        setTimeout(function () {
-          cow.classList.remove("jump");
-        }, 600);
-        audio_jump.play();
+      gameContainer.classList.remove("hide");
+      name_score_info.classList.remove("hide");
+      name_local.innerHTML = localStorage.getItem("name");
+      if (localStorage.getItem("value")) {
+        value_local.textContent = localStorage.getItem("value");
       }
+    });
 
-      document.addEventListener("keyup", function () {
-        jump();
-      });
+    function convertSecondsToTime() {
+      given_seconds = timeInSec;
 
-      let live = setInterval(function () {
-        let topcow = parseInt(
-          window.getComputedStyle(cow).getPropertyValue("top")
-        );
+      dateObj = new Date(given_seconds * 10);
+      minutes = dateObj.getUTCMinutes();
+      seconds = dateObj.getSeconds();
+      miliSeconds = dateObj.getMilliseconds();
 
-        let rightCactus = parseInt(
-          window.getComputedStyle(cactus).getPropertyValue("right")
-        );
+      timeString =
+        minutes.toString().padStart(2, "0") +
+        ":" +
+        seconds.toString().padStart(2, "0") +
+        ":" +
+        (miliSeconds / 10).toString().padStart(2, "0");
 
-        if (rightCactus > 505 && rightCactus < 540 && topcow > -85) {
-          audio_game_over.play();
-          reset_time();
-          // alert("Game Over " + "\n" + "Your time: " + `${timeString}`);
-          if (localStorage.getItem("value")) {
-            const timeString1 = timeString.split(":");
-            const timeString2 = localStorage.getItem("value").split(":");
-            console.log(timeString1[1], " - ", timeString2[1]);
-            if (
-              timeString1[1] + timeString1[2] >
-              timeString2[1] + timeString2[2]
-            ) {
-              localStorage.setItem("value", timeString);
-              value_local.textContent = timeString;
-              modal.classList.add("show");
-              overlay.classList.add("show");
-            }
-          } else {
+      timer.textContent = timeString;
+    }
+
+    function reset_time() {
+      clearInterval(timer_interval);
+      timeInSec = 0;
+      timer.textContent = "00:00:00";
+    }
+
+    function jump() {
+      if (cow.classList != "jump") {
+        cow.classList.add("jump");
+      }
+      setTimeout(function () {
+        cow.classList.remove("jump");
+      }, 600);
+      audio_jump.play();
+    }
+
+    document.addEventListener("keyup", function () {
+      jump();
+    });
+
+    let live = setInterval(function () {
+      let topcow = parseInt(
+        window.getComputedStyle(cow).getPropertyValue("top")
+      );
+
+      let rightCactus = parseInt(
+        window.getComputedStyle(cactus).getPropertyValue("right")
+      );
+
+      if (rightCactus > 505 && rightCactus < 540 && topcow > -85) {
+        audio_game_over.play();
+        reset_time();
+        start.classList.remove("hide")
+
+        // alert("Game Over " + "\n" + "Your time: " + `${timeString}`);
+        if (localStorage.getItem("value")) {
+          const timeString1 = timeString.split(":");
+          const timeString2 = localStorage.getItem("value").split(":");
+          console.log(timeString1[1], " - ", timeString2[1]);
+          if (
+            timeString1[1] + timeString1[2] >
+            timeString2[1] + timeString2[2]
+          ) {
             localStorage.setItem("value", timeString);
             value_local.textContent = timeString;
+            modal.classList.add("show");
+            overlay.classList.add("show");
           }
-          document.body.classList.add("preload");
+        } else {
+          localStorage.setItem("value", timeString);
+          value_local.textContent = timeString;
         }
-      }, 10);
+        document.body.classList.add("preload");
+      }
+    }, 10);
 
     //   let obstaculosLive = setInterval(() => {
     //     const imageRandom = Math.floor(Math.random() * obstaculosArr.length);
@@ -562,43 +583,45 @@
     //     }
     //   }, 9000);
 
-      document.addEventListener("keyup", (event) => {
-        if (event.code === "Space") {
+    document.addEventListener("keyup", (event) => {
+      if (event.code === "Space") {
+        document.body.classList.remove("preload");
+        start.classList.add("hide")
+        start_time();
+      }
+    });
+
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
+    if (isMobile) {
+      if (window.innerHeight > window.innerWidth) {
+        alert("Please Rotate Your Phone");
+      }
+
+      document.addEventListener("touchstart", function () {
+        jump();
+      });
+
+      document.addEventListener("touchstart", (event) => {
+        if (event) {
           document.body.classList.remove("preload");
           start_time();
         }
       });
+    }
 
-      const isMobile =
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        );
+    document.addEventListener("DOMContentLoaded", function () {
+      let x = 0;
+      const fondo = document.getElementById("game_chrome");
+      const interval = setInterval(function () {
+        x -= 0.5;
+        fondo.style.backgroundPosition = x + "px 0";
+      }, 10);
+    });
+  </script>
+</body>
 
-      if (isMobile) {
-        if (window.innerHeight > window.innerWidth) {
-          alert("Please Rotate Your Phone");
-        }
-
-        document.addEventListener("touchstart", function () {
-          jump();
-        });
-
-        document.addEventListener("touchstart", (event) => {
-          if (event) {
-            document.body.classList.remove("preload");
-            start_time();
-          }
-        });
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        let x = 0;
-        const fondo = document.getElementById("game_chrome");
-        const interval = setInterval(function () {
-          x -= 0.5;
-          fondo.style.backgroundPosition = x + "px 0";
-        }, 10);
-      });
-    </script>
-  </body>
 </html>
