@@ -371,6 +371,12 @@
     .hide {
       display: none;
     }
+
+    .big{
+      width: 7rem;
+      height: 7rem!important;
+      top: -110px!important;
+    }
   </style>
 </head>
 
@@ -465,8 +471,8 @@
     });
 
     const obstaculosArr = [
-      "https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png",
-      "./assets/fardo.png",
+      // "https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png",
+      // "./assets/fardo.png",
       "./assets/Emilio.gif",
     ];
 
@@ -573,6 +579,10 @@
         let newImg = document.createElement("img");
         newImg.src =
           obstaculosArr[Math.floor(Math.random() * obstaculosArr.length)];
+        let newImgSource = newImg.src.split('/');
+        if(newImgSource[newImgSource.length - 1] === 'Emilio.gif'){
+          newImg.className = 'big';
+        }
         newImg.id = "obstaculo";
         if (obstaculos[0].firstElementChild.src == newImg.src) {
           return;
