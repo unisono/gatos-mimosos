@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+        :root {
+            --speed: 1.4s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html{
+            height: 100vh;
+        }
+        body {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            background-color: #9f9f9f;
+        }
+
+        .game_chrome {
+            width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 5px 5px 15px #00000091;
+            padding: 50px 300px;
+            height: 300px;
+            z-index: 9;
+            background-color: #ebebeb;
+        }
+
+        #game_over {
+            position: absolute;
+            content: "";
+            height: 250px;
+            width: 250px;
+            background-color: red;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+        }
+
+        .line {
+            height: 6px;
+            width: 100%;
+            position: relative;
+            background-image: url(https://arsen-nazaryan.github.io/dino_t_rex/img/land.png);
+            background-repeat: repeat;
+            background-size: contain;
+            animation: road_land 0.6s infinite linear;
+        }
+
+        .line::before {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 0;
+            right: 0;
+            border: 1px solid #7878782b;
+        }
+
+        #dino {
+            position: absolute;
+            top: -54px;
+            left: 0;
+            z-index: 99;
+        }
+
+        #cactus {
+            position: absolute;
+            top: -55px;
+            right: 0;
+            animation: move var(--speed) infinite linear;
+            animation-delay: 0.7s;
+        }
+
+        .line img {
+            height: 60px;
+        }
+
+        .elements {
+            position: relative;
+            z-index: -1;
+        }
+
+        .elements::before {
+            background-image: url(https://arsen-nazaryan.github.io/dino_t_rex/img/cloud.PNG);
+            top: -170px;
+            right: -350px;
+            animation: move_cloud_1 var(--speed) infinite linear;
+            animation-delay: 0.2s;
+        }
+
+        .elements::before,
+        .elements::after {
+            position: absolute;
+            content: "";
+            height: 25px;
+            width: 50px;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .elements::after {
+            background-image: url(https://arsen-nazaryan.github.io/dino_t_rex/img/cloud.PNG);
+            top: -140px;
+            right: -30px;
+            animation: move_cloud_2 var(--speed) infinite linear;
+        }
+
+        .jump {
+            animation: jump 0.6s infinite linear;
+        }
+
+        .timer_info {
+            font-size: 20px;
+            padding-top: 15px;
+            font-family: "Press Start 2P", cursive;
+            color: #333;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .timer_info p {
+            padding-top: 40px;
+            text-align: center;
+            font-size: 10px;
+        }
+        .timer_info p span {
+            font-weight: bold;
+            font-size: 14px;
+            color: #3179a7;
+        }
+        .timer_info p span:hover {
+            font-size: 15px;
+            transition: all .5s ease-in-out;
+        }
+
+        @keyframes move {
+            0% {
+                right: -50px;
+            }
+
+            100% {
+                right: 100%;
+            }
+        }
+
+        @keyframes jump {
+            0% {
+                top: -57px;
+            }
+
+            25% {
+                top: -90px;
+            }
+
+            50% {
+                top: -140px;
+            }
+
+            75% {
+                top: -90px;
+            }
+
+            100% {
+                top: -55px;
+            }
+        }
+
+        @keyframes move_cloud_1 {
+            0% {
+                right: -350px;
+            }
+
+            100% {
+                right: 100%;
+            }
+        }
+
+        @keyframes move_cloud_2 {
+            0% {
+                right: -30px;
+            }
+
+            100% {
+                right: 100%;
+            }
+        }
+
+        @keyframes road_land {
+            0% {
+                background-position-x: 150px;
+            }
+
+            100% {
+                background-position-x: 0;
+            }
+        }
+
+        .preload *,
+        .preload *::before,
+        .preload *::after {
+            animation-duration: 0s !important;
+            -webkit-animation-duration: 0s !important;
+        }
+    </style>
+</head>
+
+<body class="preload">
+
+    <div class="game_chrome">
+        <div class="line">
+            <p class="dino_rex">
+                <img id="dino" src="./assets/Jugador.gif" alt="dino_pic">
+            </p>
+            <p class="elements">
+                <img id='cactus' src="https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png" alt="cactus_pic">
+            </p>
+            <div class="timer_info" id="timer">00:00:00
+                <p>¡Presionar la <span>BARRA ESPACIADORA</span> para EMPEZAR!</p>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        var dino = document.getElementById("dino");
+
+        var cactus = document.getElementById("cactus");
+
+        var timer = document.getElementById("timer");
+
+        var audio_jump = new Audio( 
+            "https://arsen-nazaryan.github.io/dino_t_rex/audio/jump.wav"
+        );
+
+        var audio_game_over = new Audio(
+            "https://arsen-nazaryan.github.io/dino_t_rex/audio/dead.wav"
+        );
+
+        var timeInSec = 0;
+
+        var timer_interval;
+
+        function start_time() {
+            if (timer_interval) {
+                clearInterval(timer_interval);
+            }
+
+            timer_interval = setInterval(function () {
+                timeInSec += 1;
+                convertSecondsToTime();
+            }, 10);
+        }
+
+        function convertSecondsToTime() {
+            given_seconds = timeInSec;
+
+            dateObj = new Date(given_seconds * 10);
+            minutes = dateObj.getUTCMinutes();
+            seconds = dateObj.getSeconds();
+            miliSeconds = dateObj.getMilliseconds();
+
+            timeString =
+                minutes.toString().padStart(2, "0") +
+                ":" +
+                seconds.toString().padStart(2, "0") +
+                ":" +
+                (miliSeconds / 10).toString().padStart(2, "0");
+
+            timer.textContent = timeString;
+        }
+
+        function reset_time() {
+            clearInterval(timer_interval);
+            timeInSec = 0;
+            timer.textContent = "00:00:00";
+        }
+
+        function jump() {
+            if (dino.classList != "jump") {
+                dino.classList.add("jump");
+            }
+            setTimeout(function () {
+                dino.classList.remove("jump");
+            }, 600);
+            audio_jump.play();
+        }
+
+        document.addEventListener("keyup", function () {
+            jump();
+        });
+
+        let live = setInterval(function () {
+            let topDino = parseInt(window.getComputedStyle(dino).getPropertyValue("top"));
+            let rightCactus = parseInt(
+                window.getComputedStyle(cactus).getPropertyValue("right")
+            );
+
+            if (rightCactus > 505 && rightCactus < 540 && topDino > -85) {
+                audio_game_over.play();
+                reset_time();
+                // alert("Game Over " + "\n" + "Your time: " + `${timeString}`);
+                document.body.classList.add("preload");
+            }
+        }, 10);
+
+        document.addEventListener("keyup", (event) => {
+            if (event.code === "Space") {
+                document.body.classList.remove("preload");
+                start_time();
+            }
+        });
+
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        if (isMobile) {
+
+            if (window.innerHeight > window.innerWidth) {
+                alert("Please Rotate Your Phone");
+            }
+
+            document.addEventListener('touchstart', function () {
+                jump();
+            });
+
+            document.addEventListener('touchstart', event => {
+                if (event) {
+                    document.body.classList.remove('preload');
+                    start_time()
+                }
+            })
+
+        };
+    </script>
+</body>
+
+</html>
