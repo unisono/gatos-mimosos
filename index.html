@@ -57,7 +57,7 @@
             height: 6px;
             width: 100%;
             position: relative;
-            background-image: url(https://arsen-nazaryan.github.io/dino_t_rex/img/land.png);
+            background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/land.png);
             background-repeat: repeat;
             background-size: contain;
             animation: road_land 0.6s infinite linear;
@@ -72,7 +72,7 @@
             border: 1px solid #7878782b;
         }
 
-        #dino {
+        #cow {
             position: absolute;
             top: -54px;
             left: 0;
@@ -97,7 +97,7 @@
         }
 
         .elements::before {
-            background-image: url(https://arsen-nazaryan.github.io/dino_t_rex/img/cloud.PNG);
+            background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/cloud.PNG);
             top: -170px;
             right: -350px;
             animation: move_cloud_1 var(--speed) infinite linear;
@@ -115,7 +115,7 @@
         }
 
         .elements::after {
-            background-image: url(https://arsen-nazaryan.github.io/dino_t_rex/img/cloud.PNG);
+            background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/cloud.PNG);
             top: -140px;
             right: -30px;
             animation: move_cloud_2 var(--speed) infinite linear;
@@ -224,8 +224,8 @@
 
     <div class="game_chrome">
         <div class="line">
-            <p class="dino_rex">
-                <img id="dino" src="./assets/Jugador.gif" alt="dino_pic">
+            <p class="cow_rex">
+                <img id="cow" src="./assets/Jugador.gif" alt="cow_pic">
             </p>
             <p class="elements">
                 <img id='cactus' src="https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png" alt="cactus_pic">
@@ -237,18 +237,18 @@
         </div>
     </div>
     <script>
-        var dino = document.getElementById("dino");
+        var cow = document.getElementById("cow");
 
         var cactus = document.getElementById("cactus");
 
         var timer = document.getElementById("timer");
 
         var audio_jump = new Audio( 
-            "https://arsen-nazaryan.github.io/dino_t_rex/audio/jump.wav"
+            "https://arsen-nazaryan.github.io/cow_t_rex/audio/jump.wav"
         );
 
         var audio_game_over = new Audio(
-            "https://arsen-nazaryan.github.io/dino_t_rex/audio/dead.wav"
+            "https://arsen-nazaryan.github.io/cow_t_rex/audio/dead.wav"
         );
 
         var timeInSec = 0;
@@ -291,11 +291,11 @@
         }
 
         function jump() {
-            if (dino.classList != "jump") {
-                dino.classList.add("jump");
+            if (cow.classList != "jump") {
+                cow.classList.add("jump");
             }
             setTimeout(function () {
-                dino.classList.remove("jump");
+                cow.classList.remove("jump");
             }, 600);
             audio_jump.play();
         }
@@ -305,12 +305,12 @@
         });
 
         let live = setInterval(function () {
-            let topDino = parseInt(window.getComputedStyle(dino).getPropertyValue("top"));
+            let topcow = parseInt(window.getComputedStyle(cow).getPropertyValue("top"));
             let rightCactus = parseInt(
                 window.getComputedStyle(cactus).getPropertyValue("right")
             );
 
-            if (rightCactus > 505 && rightCactus < 540 && topDino > -85) {
+            if (rightCactus > 505 && rightCactus < 540 && topcow > -85) {
                 audio_game_over.play();
                 reset_time();
                 // alert("Game Over " + "\n" + "Your time: " + `${timeString}`);
