@@ -6,9 +6,11 @@
     <title>Document</title>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
       :root {
         --speed: 1.4s;
       }
+
       * {
         margin: 0;
         padding: 0;
@@ -20,8 +22,12 @@
         height: 100%;
         display: flex;
         align-items: center;
+        justify-content: center;
         background-color: #9f9f9f;
+        font-family: "Press Start 2P", cursive;
+        flex-direction: column;
       }
+
       .game_chrome {
         width: 600px;
         margin: 0 auto;
@@ -38,6 +44,7 @@
         background-image: url(assets/fondo.png);
         background-repeat: repeat-x;
       }
+
       #game_over {
         position: absolute;
         content: "";
@@ -49,6 +56,7 @@
         transform: translateX(-50%);
         display: none;
       }
+
       .line {
         height: 6px;
         width: 100%;
@@ -59,6 +67,7 @@
         animation: road_land 0.6s infinite linear;
         margin-top: 273px;
       }
+
       .line::before {
         content: "";
         position: absolute;
@@ -67,26 +76,31 @@
         right: 0;
         border: 1px solid #7878782b;
       }
+
       #cow {
         position: absolute;
         top: -54px;
         left: 0;
         z-index: 99;
       }
-      #cactus {
+
+      #obstaculo {
         position: absolute;
         top: -55px;
         right: 0;
         animation: move var(--speed) infinite linear;
         animation-delay: 0.7s;
       }
+
       .line img {
         height: 60px;
       }
+
       .elements {
         position: relative;
         z-index: -1;
       }
+
       .elements::before {
         background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/cloud.PNG);
         top: -170px;
@@ -94,6 +108,7 @@
         animation: move_cloud_1 var(--speed) infinite linear;
         animation-delay: 0.2s;
       }
+
       .elements::before,
       .elements::after {
         position: absolute;
@@ -103,16 +118,22 @@
         background-repeat: no-repeat;
         background-size: cover;
       }
+
       .elements::after {
         background-image: url(https://arsen-nazaryan.github.io/cow_t_rex/img/cloud.PNG);
         top: -140px;
         right: -30px;
         animation: move_cloud_2 var(--speed) infinite linear;
       }
+
       .jump {
         animation: jump 0.6s infinite linear;
       }
+
       .timer_info {
+        position: absolute;
+        top: -50px;
+        right: -480px;
         font-size: 20px;
         padding-top: 15px;
         font-family: "Press Start 2P", cursive;
@@ -120,6 +141,7 @@
         letter-spacing: 1px;
         text-align: center;
       }
+
       .timer_info p {
         padding-top: 40px;
         text-align: center;
@@ -134,54 +156,72 @@
         font-size: 15px;
         transition: all 0.5s ease-in-out;
       }
+
       @keyframes move {
         0% {
           right: -50px;
         }
+
         100% {
           right: 100%;
         }
       }
+
       @keyframes jump {
         0% {
           top: -57px;
         }
+
         25% {
           top: -90px;
         }
+
         50% {
           top: -140px;
         }
+
         75% {
           top: -90px;
         }
+
         100% {
           top: -55px;
         }
       }
+
       @keyframes move_cloud_1 {
         0% {
           right: -350px;
         }
+
         100% {
           right: 100%;
         }
       }
+
       @keyframes move_cloud_2 {
         0% {
           right: -30px;
         }
+
         100% {
           right: 100%;
         }
       }
+
       @keyframes road_land {
         0% {
           background-position-x: 150px;
         }
+
         100% {
           background-position-x: 0;
         }
+      }
+
+      .background {
+        background-image: url("./assets/fondo.png");
+        background-repeat: repeat;
       }
       .preload *,
       .preload *::before,
@@ -189,17 +229,148 @@
         animation-duration: 0s !important;
         -webkit-animation-duration: 0s !important;
       }
+
+      .hide {
+        display: none;
+      }
+
+      #pantalla_carga {
+        padding: 200px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 5px 5px 15px #00000091;
+      }
+
+      #pantalla_carga form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #pantalla_carga form label {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+
+      #pantalla_carga form input {
+        margin-bottom: 20px;
+        padding: 10px 5px;
+        border-radius: 8px;
+        font-family: monospace;
+        text-transform: uppercase;
+        font-size: 20px;
+        text-align: center;
+      }
+
+      #pantalla_carga form button {
+        font-size: 14px;
+        padding: 20px;
+        background-color: #3179a7;
+        border: 0;
+        color: white;
+        text-transform: uppercase;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-family: "Press Start 2P", cursive;
+        cursor: pointer;
+      }
+
+      #pantalla_carga form button:hover {
+        transform: scale(1.1);
+        transition: all 1s ease;
+      }
+
+      #pantalla_carga form small {
+        text-align: center;
+      }
+
+      #name_score_info {
+        background-color: #ebebeb;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 5px 5px 15px #00000091;
+        margin-bottom: 20px;
+      }
+
+      #name_score_info > div {
+        text-align: center;
+      }
+
+      #name_score_info > div h1 {
+        margin-bottom: 20px;
+      }
+
+      #name_score_info > div h2 {
+        margin-top: 20px;
+      }
+
+      #name_score_info > div span {
+        color: #3179a7;
+      }
+      #modal {
+        display: none;
+        position: absolute;
+        top: 25%;
+        left: 40%;
+        width: 450px;
+        height: 450px;
+        text-align: center;
+        background-color: #ebebeb;
+        color: #333;
+        z-index: 99999;
+        padding: 30px;
+        border-radius: 8px;
+      }
+      #modal.show {
+        display: block;
+      }
+      #overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 15;
+        width: 100%;
+        height: 100%;
+        display: none;
+        background-color: #3333338f;
+      }
+      #overlay.show {
+        display: block;
+      }
     </style>
   </head>
+
   <body class="preload">
-    <div id="game_chrome" class="game_chrome">
+    <div id="overlay"></div>
+    <div id="modal">
+      <h1>¡Superaste tu puntación!</h1>
+    </div>
+
+    <div id="pantalla_carga">
+      <form action="" id="form_pantalla_carga">
+        <label for="name">Ingresa tu nombre</label>
+        <input type="text" id="name" placeholder="Ingresa tu nombre" />
+        <button id="registrar">Registrar</button>
+        <small>¡MOOOCHA SUERTE!</small>
+      </form>
+    </div>
+
+    <div id="name_score_info" class="hide">
+      <div>
+        <h1>¡VAMOS: <span id="name_local"></span>!</h1>
+      </div>
+      <hr />
+      <div>
+        <h2>Tu mejor puntuación: <span id="value_local"></span></h2>
+      </div>
+    </div>
+    <div class="game_chrome hide" id="game_chrome">
       <div class="line">
         <p class="cow_rex">
           <img id="cow" src="./assets/Jugador.gif" alt="cow_pic" />
         </p>
         <p class="elements">
           <img
-            id="cactus"
+            id="obstaculo"
             src="https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png"
             alt="cactus_pic"
           />
@@ -212,44 +383,112 @@
     </div>
     <script>
       var cow = document.getElementById("cow");
-      var cactus = document.getElementById("cactus");
+
+      var cactus = document.getElementById("obstaculo");
+
+      const obstaculos = document.querySelectorAll(".elements");
+
       var timer = document.getElementById("timer");
+
       var audio_jump = new Audio(
         "https://arsen-nazaryan.github.io/cow_t_rex/audio/jump.wav"
       );
+
       var audio_game_over = new Audio(
         "https://arsen-nazaryan.github.io/cow_t_rex/audio/dead.wav"
       );
+
       var timeInSec = 0;
+
       var timer_interval;
+
+      const modal = document.getElementById("modal");
+
+      const overlay = document.getElementById("overlay");
+
+      const buttonRegister = document.getElementById("registrar");
+      const gameContainer = document.getElementById("game_chrome");
+      const pantalla_carga = document.getElementById("pantalla_carga");
+      const form_pantalla_carga = document.getElementById(
+        "form_pantalla_carga"
+      );
+      const name_score_info = document.getElementById("name_score_info");
+      const name_local = document.getElementById("name_local");
+      const value_local = document.getElementById("value_local");
+
+      overlay.addEventListener("click", function () {
+        overlay.classList.remove("show");
+        modal.classList.remove("show");
+      });
+
+      const obstaculosArr = [
+        "https://arsen-nazaryan.github.io/dino_t_rex/img/cactus.png",
+        "./assets/fardo.png",
+      ];
+
       function start_time() {
         if (timer_interval) {
           clearInterval(timer_interval);
         }
+
         timer_interval = setInterval(function () {
           timeInSec += 1;
           convertSecondsToTime();
         }, 10);
       }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        if (localStorage.getItem("name")) {
+          name_local.innerHTML = localStorage.getItem("name");
+          if (localStorage.getItem("value")) {
+            value_local.textContent = localStorage.getItem("value");
+          }
+          pantalla_carga.classList.add("hide");
+
+          gameContainer.classList.remove("hide");
+          name_score_info.classList.remove("hide");
+        }
+      });
+      form_pantalla_carga.addEventListener("submit", (event) => {
+        event.preventDefault();
+        let nameValue = document.getElementById("name").value;
+        localStorage.setItem("name", nameValue);
+        pantalla_carga.classList.add("hide");
+        if (localStorage.getItem("value")) {
+          value_local.textContent = localStorage.getItem("value");
+        }
+        gameContainer.classList.remove("hide");
+        name_score_info.classList.remove("hide");
+        name_local.innerHTML = localStorage.getItem("name");
+        if (localStorage.getItem("value")) {
+          value_local.textContent = localStorage.getItem("value");
+        }
+      });
+
       function convertSecondsToTime() {
         given_seconds = timeInSec;
+
         dateObj = new Date(given_seconds * 10);
         minutes = dateObj.getUTCMinutes();
         seconds = dateObj.getSeconds();
         miliSeconds = dateObj.getMilliseconds();
+
         timeString =
           minutes.toString().padStart(2, "0") +
           ":" +
           seconds.toString().padStart(2, "0") +
           ":" +
           (miliSeconds / 10).toString().padStart(2, "0");
+
         timer.textContent = timeString;
       }
+
       function reset_time() {
         clearInterval(timer_interval);
         timeInSec = 0;
         timer.textContent = "00:00:00";
       }
+
       function jump() {
         if (cow.classList != "jump") {
           cow.classList.add("jump");
@@ -259,40 +498,91 @@
         }, 600);
         audio_jump.play();
       }
+
       document.addEventListener("keyup", function () {
         jump();
       });
+
       let live = setInterval(function () {
         let topcow = parseInt(
           window.getComputedStyle(cow).getPropertyValue("top")
         );
+
         let rightCactus = parseInt(
           window.getComputedStyle(cactus).getPropertyValue("right")
         );
+
         if (rightCactus > 505 && rightCactus < 540 && topcow > -85) {
           audio_game_over.play();
           reset_time();
           // alert("Game Over " + "\n" + "Your time: " + `${timeString}`);
+          if (localStorage.getItem("value")) {
+            const timeString1 = timeString.split(":");
+            const timeString2 = localStorage.getItem("value").split(":");
+            console.log(timeString1[1], " - ", timeString2[1]);
+            if (
+              timeString1[1] + timeString1[2] >
+              timeString2[1] + timeString2[2]
+            ) {
+              localStorage.setItem("value", timeString);
+              value_local.textContent = timeString;
+              modal.classList.add("show");
+              overlay.classList.add("show");
+            }
+          } else {
+            localStorage.setItem("value", timeString);
+            value_local.textContent = timeString;
+          }
           document.body.classList.add("preload");
         }
       }, 10);
+
+    //   let obstaculosLive = setInterval(() => {
+    //     const imageRandom = Math.floor(Math.random() * obstaculosArr.length);
+
+    //     const imageElement = document.createElement("img");
+    //     imageElement.src = obstaculosArr[imageRandom];
+    //     imageElement.id = "obstaculo";
+
+    //     const elements = document.getElementsByClassName("elements");
+
+    //     elements.appendChild(imageElement);
+
+    //     let element = parseInt(
+    //       window
+    //         .getComputedStyle(elements[imageRandom])
+    //         .getPropertyValue("right")
+    //     );
+
+    //     if (element > 505 && element < 540 && topcow > -85) {
+    //       audio_game_over.play();
+    //       reset_time();
+    //       // alert("Game Over " + "\n" + "Your time: " + `${timeString}`);
+    //       document.body.classList.add("preload");
+    //     }
+    //   }, 9000);
+
       document.addEventListener("keyup", (event) => {
         if (event.code === "Space") {
           document.body.classList.remove("preload");
           start_time();
         }
       });
+
       const isMobile =
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
           navigator.userAgent
         );
+
       if (isMobile) {
         if (window.innerHeight > window.innerWidth) {
           alert("Please Rotate Your Phone");
         }
+
         document.addEventListener("touchstart", function () {
           jump();
         });
+
         document.addEventListener("touchstart", (event) => {
           if (event) {
             document.body.classList.remove("preload");
@@ -300,6 +590,7 @@
           }
         });
       }
+
       document.addEventListener("DOMContentLoaded", function () {
         let x = 0;
         const fondo = document.getElementById("game_chrome");
